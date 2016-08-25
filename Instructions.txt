@@ -1,0 +1,80 @@
+http://math.stackexchange.com/questions/1897148/existence-of-a-prime-with-some-additional-properties
+
+% Matlab/octave instructions: ==============================================
+
+m = 2*31;
+R = resgrid(m)
+
+[v c] = numberofvarsandclauses(m)
+
+% generate the cnf logic file for zchaff to solve
+generatecnf(2*31)
+
+% unix instruction: ========================================================
+zchaff g62.cnf | tee g62soln.txt
+
+% Matlab/octave instructions: ==============================================
+
+% see g31solntrim.txt to extract the solution fron zchaff
+g31solnplus = find(g31soln > 0)
+
+D = zeros(m,m);
+
+for k = 1:length(g31solnplus) D(g31solnplus(k)) = 1; end
+
+% this generates the solution for sigma
+
+sigma = [1:m]*D'
+
+sigma2 = [30   48   41   12   50    5   14    4   62   58   19   17   49   46   57   54   29   56   52   26   11    7   27   47   20   35   51   34   39   15   60   42   24    1   18   40   25   32   36   22  38   53   43   23   44   33    8   31   16    2   28   13   59   21   37   10   55    3   61    9   45    6];
+
+sigma3 = [30   48   41   12   50    5   14    4   62   58 ...
+          19   17   49   46   57   54   29   56   52   26 ...
+          11    7   27   47   20   35   51   34   39   15 ...
+          60   42   24    1   18   40   25   32   36   22 ...
+          38   53   43   23   44   33    8   31   16    2 ...
+          28   13   59   21   37   10   55    3   61    9 ...
+          45    6];
+		  
+m = 2*31;
+sanitycheck = [];
+for k = 1:length(sigma3)
+    sanitycheck = [sanitycheck , xkmodm(k,sigma3(k),m)];
+end
+
+
+sanitycheck2 = [];
+for k = 1:length(sigma3)
+    sanitycheck2 = [sanitycheck2 , modexp(k,sigma3(k),m)];
+end
+	  
+--------------------------------------------------
+
+m = 2*43;
+generatecnf(m)
+
+zchaff g86.cnf | tee g86soln.txt
+
+Z-Chaff Version: zChaff 2007.3.12
+Solving g86.cnf ......
+Decision: 824/7396      Time: 30041.9/86400
+Memory out, unable to determine the satisfiability of the instance
+Random Seed Used                                0
+Max Decision Level                              2905
+Num. of Decisions                               764682389
+( Stack + Vsids + Shrinking Decisions )         596029103 + 18794866 + 149858420
+Original Num Variables                          7396
+Original Num Clauses                            1158666
+Original Num Literals                           2339004
+Added Conflict Clauses                          17593544
+Num of Shrinkings                               2474312
+Deleted Conflict Clauses                        16797129
+Deleted Clauses                                 16797129
+Added Conflict Literals                         2147302217
+Deleted (Total) Literals                        2100082016
+Number of Implication                           12669261433
+Total Run Time                                  30045.2
+RESULT: ABORT : MEM OUT
+
+--------------------------------------------------
+
